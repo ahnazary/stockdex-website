@@ -1,0 +1,389 @@
+/* ============================================
+   Stockdex - Main Stylesheet
+   ============================================ */
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============================================
+   Theme Variables
+   ============================================ */
+:root {
+    --transition-speed: 0.3s;
+}
+
+[data-theme="dark"] {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: rgba(30, 41, 59, 0.8);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border-color: #334155;
+    --border-hover: #475569;
+    --accent: #22c55e;
+    --accent-dark: #16a34a;
+    --tag-bg: rgba(51, 65, 85, 0.5);
+    --orb-1: rgba(34, 197, 94, 0.15);
+    --orb-2: rgba(59, 130, 246, 0.15);
+    --orb-3: rgba(168, 85, 247, 0.1);
+}
+
+[data-theme="light"] {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #e2e8f0;
+    --bg-tertiary: rgba(255, 255, 255, 0.9);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --border-color: #cbd5e1;
+    --border-hover: #94a3b8;
+    --accent: #16a34a;
+    --accent-dark: #15803d;
+    --tag-bg: rgba(226, 232, 240, 0.8);
+    --orb-1: rgba(34, 197, 94, 0.2);
+    --orb-2: rgba(59, 130, 246, 0.2);
+    --orb-3: rgba(168, 85, 247, 0.15);
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: var(--text-primary);
+    transition: background var(--transition-speed), color var(--transition-speed);
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* ============================================
+   Animated Background Canvas
+   ============================================ */
+#particleCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Grid pattern overlay */
+.grid-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(var(--border-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ============================================
+   Header
+   ============================================ */
+header {
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color var(--transition-speed);
+}
+
+.logo-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+/* ============================================
+   Theme Toggle Switch
+   ============================================ */
+.theme-switch-container {
+    position: fixed;
+    top: 1.5rem;
+    right: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 100;
+    background: var(--bg-tertiary);
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
+    transition: all var(--transition-speed);
+}
+
+.theme-switch-container:hover {
+    border-color: var(--accent);
+}
+
+.theme-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--text-muted);
+    transition: color var(--transition-speed);
+}
+
+.theme-switch-container .sun-icon {
+    color: var(--text-muted);
+}
+
+.theme-switch-container .moon-icon {
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .theme-switch-container .sun-icon {
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .theme-switch-container .moon-icon {
+    color: var(--text-muted);
+}
+
+.theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--border-color);
+    transition: var(--transition-speed);
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--text-primary);
+    transition: var(--transition-speed);
+    border-radius: 50%;
+}
+
+.theme-switch input:checked + .slider {
+    background-color: var(--accent);
+}
+
+.theme-switch input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* ============================================
+   Main Content
+   ============================================ */
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    margin-top: -80px;
+    position: relative;
+    z-index: 10;
+}
+
+.hero {
+    text-align: center;
+    max-width: 700px;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+    line-height: 1.6;
+    transition: color var(--transition-speed);
+}
+
+/* ============================================
+   Search Bar
+   ============================================ */
+.search-container {
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    padding-left: 3.5rem;
+    font-size: 1.125rem;
+    font-family: inherit;
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    outline: none;
+    transition: all var(--transition-speed);
+    backdrop-filter: blur(10px);
+}
+
+.search-bar::placeholder {
+    color: var(--text-muted);
+}
+
+.search-bar:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1),
+                0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.search-icon {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+    transition: color var(--transition-speed);
+}
+
+.search-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.search-hint {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    transition: color var(--transition-speed);
+}
+
+.search-hint kbd {
+    background: var(--border-color);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.75rem;
+    transition: background var(--transition-speed);
+}
+
+/* ============================================
+   Popular Searches
+   ============================================ */
+.popular-searches {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.popular-searches span {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    transition: color var(--transition-speed);
+}
+
+.stock-tag {
+    background: var(--tag-bg);
+    border: 1px solid var(--border-hover);
+    padding: 0.5rem 1rem;
+    border-radius: 100px;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.stock-tag:hover {
+    background: rgba(34, 197, 94, 0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+footer {
+    padding: 1.5rem 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    position: relative;
+    z-index: 10;
+    transition: color var(--transition-speed);
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .search-bar {
+        padding: 1rem 1.25rem;
+        padding-left: 3rem;
+        font-size: 1rem;
+    }
+}
